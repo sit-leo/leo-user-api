@@ -1,14 +1,23 @@
 package app.leo.user.models;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
 public class User {
+    @Id
     private long id;
+
+    @NotNull
     private String username;
+
+    @NotNull
     private String password;
+
+    @NotNull
     private String role;
 
     public User(long id, String username, String password, String role) {
