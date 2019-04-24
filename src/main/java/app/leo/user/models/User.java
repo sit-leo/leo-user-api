@@ -20,6 +20,20 @@ public class User {
     @NotNull
     private String role;
 
+    public User() {
+    }
+
+    public User(@NotNull String username, @NotNull String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(@NotNull String username, @NotNull String password, @NotNull String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     public User(long id, String username, String password, String role) {
         this.id = id;
         this.username = username;
