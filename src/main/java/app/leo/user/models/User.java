@@ -1,8 +1,10 @@
 package app.leo.user.models;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
-@Entity(name = "users")
+@Entity
+@Table(name = "users")
 public class User {
     private long id;
     private String username;
