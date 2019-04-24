@@ -39,8 +39,6 @@ public class TokenService {
         return token ;
     }
 
-
-
     public String getUsernameFromToken(String token) {
         String tokenFormat = token.substring(7);
         Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(tokenFormat);
