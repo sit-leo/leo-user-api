@@ -7,6 +7,10 @@ public class Token {
     public Token() {
     }
 
+    public Token(String token) {
+        this.token = token;
+    }
+
     public Token(String token, long expires) {
         this.token = token;
         this.expires = expires;
