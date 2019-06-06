@@ -3,6 +3,7 @@ package app.leo.user.controllers;
 
 import app.leo.user.DTO.Token;
 import app.leo.user.DTO.UserLoginRequest;
+import app.leo.user.exceptions.UserNotFoundException;
 import app.leo.user.exceptions.WrongPasswordException;
 import app.leo.user.models.User;
 import app.leo.user.services.TokenService;
@@ -28,7 +29,11 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Token> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
         User user = this.userService.findByUsername(userLoginRequest.getUsername());
-        if(user.getPassword().equals(userLoginRequest.getPassword())){
+        if(user == null){
+            throw new UserNotFoundException("User is not found");
+        }
+        boolean passwordIsCorrect = user.getPassword().equals(userLoginRequest.getPassword());
+        if(passwordIsCorrect){
             return  new ResponseEntity<>(tokenService.generateTokenByUser(user), HttpStatus.CREATED);
         }else{
             throw new WrongPasswordException("Wrong username or password");
