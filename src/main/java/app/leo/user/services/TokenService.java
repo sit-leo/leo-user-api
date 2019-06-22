@@ -1,14 +1,14 @@
 package app.leo.user.services;
 
-import app.leo.user.DTO.Token;
-
-import app.leo.user.models.User;
-import app.leo.user.repositories.UserRepository;
-import io.jsonwebtoken.Jws;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import app.leo.user.DTO.Token;
+import app.leo.user.models.User;
+import app.leo.user.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -22,6 +22,22 @@ public class TokenService {
 
     @Value("${jwt.expires}")
     private String expires;
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public String getExpires() {
+        return expires;
+    }
+
+    public void setExpires(String expires) {
+        this.expires = expires;
+    }
 
     public Token generateTokenByUser(User user) {
         Claims claims = Jwts.claims()
