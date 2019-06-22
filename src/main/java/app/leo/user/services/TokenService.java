@@ -1,5 +1,6 @@
 package app.leo.user.services;
 
+import app.leo.user.exceptions.InvalidTokenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,11 @@ public class TokenService {
     }
 
     public String getUsernameFromToken(String token) {
+        if (token == null) {
+            throw new InvalidTokenException("Token is null");
+        } else if (!token.startsWith("Bearer") ||token.length() < 7) {
+            throw new InvalidTokenException("Token is invalid");
+        }
         String tokenFormat = token.substring(7);
         Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(tokenFormat);
         return (String) claims.getBody().get("sub");
