@@ -5,6 +5,8 @@ import app.leo.user.repositories.RefreshTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RefreshTokenService {
 
@@ -12,11 +14,11 @@ public class RefreshTokenService {
     private RefreshTokenRepository refreshTokenRepository;
 
     public void createRefreshToken(RefreshToken refreshToken){
-        refreshTokenRepository.addItem(refreshToken);
+        refreshTokenRepository.save(refreshToken);
     }
 
-    public RefreshToken getRefreshToken(String username){
-        return refreshTokenRepository.getToken(username);
+    public RefreshToken getRefreshTokenByUsername(String username){
+        return refreshTokenRepository.findByUsername(username);
     }
 
 }

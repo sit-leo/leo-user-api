@@ -15,14 +15,14 @@ public class TokenController {
     @Autowired
     private RefreshTokenService refreshTokenService;
 
-    @PostMapping("/add")
+    @PostMapping("/createRefreshToken")
     public ResponseEntity<String> add(RefreshToken token){
         refreshTokenService.createRefreshToken(token);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/get")
+    @GetMapping("/getRefreshToken")
     public ResponseEntity<RefreshToken> get(String username){
-        return new ResponseEntity<>(refreshTokenService.getRefreshToken(username),HttpStatus.OK);
+        return new ResponseEntity<>(refreshTokenService.getRefreshTokenByUsername(username),HttpStatus.OK);
     }
 }
