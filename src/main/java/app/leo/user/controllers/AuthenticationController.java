@@ -1,6 +1,6 @@
 package app.leo.user.controllers;
 
-import app.leo.user.DTO.Token;
+import app.leo.user.DTO.TokenDTO;
 import app.leo.user.DTO.UserLoginRequest;
 import app.leo.user.exceptions.UserNotFoundException;
 import app.leo.user.exceptions.WrongPasswordException;
@@ -8,6 +8,7 @@ import app.leo.user.models.User;
 import app.leo.user.services.AuthenticationService;
 import app.leo.user.services.TokenService;
 import app.leo.user.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,19 +27,23 @@ public class AuthenticationController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ModelMapper modelMapper;
+
     @PostMapping("/login")
-    public ResponseEntity<Token> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody UserLoginRequest userLoginRequest){
         User user = this.userService.findByUsername(userLoginRequest.getUsername());
         if(user == null){
             throw new UserNotFoundException("User is not found");
         }
         if(authenticationService.passwordIsCorrect(user.getPassword(),userLoginRequest.getPassword())){
-            return  new ResponseEntity<>(tokenService.generateTokenByUser(user), HttpStatus.CREATED);
+            TokenDTO tokenDTO = modelMapper.map(tokenService.generateTokenByUser(user),TokenDTO.class);
+            return  new ResponseEntity<>(tokenDTO, HttpStatus.CREATED);
         }else{
             throw new WrongPasswordException("Wrong username or password");
         }
     }
-
+    
     @GetMapping("/me")
     public ResponseEntity<User> getUser(
             @RequestHeader(name = "Authorization", required = true) String token,
