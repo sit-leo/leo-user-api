@@ -1,11 +1,13 @@
 package app.leo.user.services;
 
 import app.leo.user.exceptions.InvalidTokenException;
+import app.leo.user.models.Token;
+import app.leo.user.repositories.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import app.leo.user.DTO.Token;
+import app.leo.user.DTO.TokenDTO;
 import app.leo.user.models.User;
 import app.leo.user.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -13,16 +15,21 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.util.Date;
+
 @Service
 public class TokenService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    TokenRepository tokenRepository;
+
     @Value("${jwt.secret}")
     private String secret;
 
     @Value("${jwt.expires}")
-    private String expires;
+    private long expires;
 
     public String getSecret() {
         return secret;
@@ -32,11 +39,11 @@ public class TokenService {
         this.secret = secret;
     }
 
-    public String getExpires() {
+    public long getExpires() {
         return expires;
     }
 
-    public void setExpires(String expires) {
+    public void setExpires(long expires) {
         this.expires = expires;
     }
 
@@ -53,6 +60,9 @@ public class TokenService {
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact()
         );
+        token.setUsername(user.getUsername());
+        token.setExpiresTime(new Date(System.currentTimeMillis()+expires));
+        tokenRepository.save(token);
         return token ;
     }
 
@@ -66,4 +76,5 @@ public class TokenService {
         Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(tokenFormat);
         return (String) claims.getBody().get("sub");
     }
+
 }
