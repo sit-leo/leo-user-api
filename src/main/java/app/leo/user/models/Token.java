@@ -1,24 +1,25 @@
 package app.leo.user.models;
 
-
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
-@Table(name = "RefreshTokens")
-public class RefreshToken {
+@Table(name = "Tokens")
+public class Token {
+
     @Id
     @GeneratedValue
     private long id;
 
     private String username;
-
     private String token;
+    private Date expiresTime;
 
-    private int expires;
+    public Token() {
+    }
 
     public long getId() {
         return id;
@@ -44,11 +45,11 @@ public class RefreshToken {
         this.token = token;
     }
 
-    public int getExpires() {
-        return expires;
+    public Date getExpiresTime() {
+        return expiresTime;
     }
 
-    public void setExpires(int expires) {
-        this.expires = expires;
+    public void setExpiresTime(Date expiresTime) {
+        this.expiresTime = expiresTime;
     }
 }
