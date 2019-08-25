@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 @Repository
 public interface TokenRepository extends JpaRepository<Token,Long> {
 
-    Token findByUsername(String username);
+    Token findByUsernameAndToken(String username,String token);
 
     @Transactional
     void deleteByUsername(String username);

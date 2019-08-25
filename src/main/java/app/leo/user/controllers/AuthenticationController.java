@@ -4,6 +4,7 @@ import app.leo.user.DTO.TokenDTO;
 import app.leo.user.DTO.UserLoginRequest;
 import app.leo.user.exceptions.UserNotFoundException;
 import app.leo.user.exceptions.WrongPasswordException;
+import app.leo.user.models.Token;
 import app.leo.user.models.User;
 import app.leo.user.services.AuthenticationService;
 import app.leo.user.services.TokenService;
@@ -43,7 +44,7 @@ public class AuthenticationController {
             throw new WrongPasswordException("Wrong username or password");
         }
     }
-    
+
     @GetMapping("/me")
     public ResponseEntity<User> getUser(
             @RequestHeader(name = "Authorization", required = true) String token,
@@ -51,7 +52,20 @@ public class AuthenticationController {
     ) {
         String username = tokenService.getUsernameFromToken(token);
         User user = userService.findByUsername(username);
-        return new ResponseEntity<User>(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/getToken")
+    public ResponseEntity<TokenDTO> getTokenByUsernameAndToken(
+            @RequestHeader(name = "Authorization", required = true) String token
+    ){
+        Token result = tokenService.getTokenByUsernameAndToken(tokenService.getUsernameFromToken(token),token);
+       return new ResponseEntity<>(modelMapper.map(result,TokenDTO.class),HttpStatus.OK);
+    }
+    @DeleteMapping("/logout/{username}")
+    public ResponseEntity<String> logout(@RequestParam String username){
+        tokenService.LogOut(username);
+        return new ResponseEntity<>("Log out complete",HttpStatus.OK);
     }
 
 }
