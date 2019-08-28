@@ -2,6 +2,7 @@ package app.leo.user.controllers;
 
 import app.leo.user.DTO.TokenDTO;
 import app.leo.user.DTO.UserLoginRequest;
+import app.leo.user.exceptions.NotLoginException;
 import app.leo.user.exceptions.UserNotFoundException;
 import app.leo.user.exceptions.WrongPasswordException;
 import app.leo.user.models.Token;
@@ -60,10 +61,14 @@ public class AuthenticationController {
             @RequestHeader(name = "Authorization", required = true) String token
     ){
         Token result = tokenService.getTokenByUsernameAndToken(tokenService.getUsernameFromToken(token),token);
-       return new ResponseEntity<>(modelMapper.map(result,TokenDTO.class),HttpStatus.OK);
+        if(result == null){
+            throw new NotLoginException("Please Login your account");
+        }
+        return new ResponseEntity<>(modelMapper.map(result,TokenDTO.class),HttpStatus.OK);
     }
-    @DeleteMapping("/logout/{username}")
-    public ResponseEntity<String> logout(@RequestParam String username){
+    @DeleteMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader(name = "Authorization", required = true) String token){
+        String username = tokenService.getUsernameFromToken(token);
         tokenService.LogOut(username);
         return new ResponseEntity<>("Log out complete",HttpStatus.OK);
     }

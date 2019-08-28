@@ -30,6 +30,22 @@ public class TokenService {
     @Value("${jwt.expires}")
     private long expires;
 
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
+    }
+
+    public long getExpires() {
+        return expires;
+    }
+
+    public void setExpires(long expires) {
+        this.expires = expires;
+    }
+
     public Token generateTokenByUser(User user) {
         String username = user.getUsername();
         Claims claims = Jwts.claims()
@@ -76,7 +92,7 @@ public class TokenService {
     }
 
     private boolean isExpires(Token token){
-        return token.getExpiresTime().after(new Date(System.currentTimeMillis()));
+        return token.getExpiresTime().before(new Date(System.currentTimeMillis()));
     }
 
     public void LogOut(String username) {
