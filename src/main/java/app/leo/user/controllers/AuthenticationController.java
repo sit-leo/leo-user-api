@@ -60,7 +60,7 @@ public class AuthenticationController {
     public ResponseEntity<TokenDTO> getTokenByUsernameAndToken(
             @RequestHeader(name = "Authorization", required = true) String token
     ){
-        Token result = tokenService.getTokenByUsernameAndToken(tokenService.getUsernameFromToken(token),token);
+        Token result = tokenService.getTokenByUsernameAndToken(tokenService.getUsernameFromToken(token),token.substring(7));
         if(result == null){
             throw new NotLoginException("Please Login your account");
         }
