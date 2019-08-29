@@ -59,7 +59,7 @@ public class TokenService {
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact()
         );
-        token.setToken("Bearer "+token.getToken());
+        token.setToken(token.getToken());
         if(sessionIsExist(username,token.getToken())){
             return getTokenByUsernameAndToken(username,token.getToken());
         }
