@@ -1,9 +1,7 @@
 package app.leo.user.controllers;
 
 
-import app.leo.user.DTO.ApplicantProfileDTO;
-import app.leo.user.DTO.ApplicantUserCreateRequest;
-import app.leo.user.DTO.UserDTO;
+import app.leo.user.DTO.*;
 import app.leo.user.adapters.ProfileAdapter;
 import app.leo.user.models.User;
 import app.leo.user.services.UserService;
@@ -35,8 +33,19 @@ public class UserController {
         ModelMapper modelMapper = new ModelMapper();
         UserDTO response = modelMapper.map(user,UserDTO.class);
 
-        return  new ResponseEntity<UserDTO>(response, HttpStatus.CREATED);
+        return  new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PostMapping("/user/recruiter")
+    public ResponseEntity<UserDTO> createRecruiterUser(@RequestBody @Valid RecruiterUserCreateRequest recruiterUserCreateRequest){
+        User user = userService.registerNewUserAccount(recruiterUserCreateRequest.getUser());
+        RecruiterProfileDTO recruiterProfile = recruiterUserCreateRequest.getRecruiterProfile();
+        recruiterProfile.setUserId(user.getId());
+        profileAdapter.createRecruiterProfile(recruiterProfile);
+        ModelMapper modelMapper = new ModelMapper();
+        UserDTO response = modelMapper.map(user,UserDTO.class);
+
+        return  new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 
 }
