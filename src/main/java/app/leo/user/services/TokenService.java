@@ -34,7 +34,7 @@ public class TokenService {
         return secret;
     }
 
-    public void setSecret(String secret) {
+    private void setSecret(String secret) {
         this.secret = secret;
     }
 
@@ -42,7 +42,7 @@ public class TokenService {
         return expires;
     }
 
-    public void setExpires(long expires) {
+    private void setExpires(long expires) {
         this.expires = expires;
     }
 
@@ -92,7 +92,7 @@ public class TokenService {
     }
 
     private boolean isExpires(Token token){
-        return token.getExpiresTime().before(new Date(System.currentTimeMillis()));
+        return !token.getExpiresTime().after(new Date(System.currentTimeMillis()));
     }
 
     public void LogOut(String username) {
