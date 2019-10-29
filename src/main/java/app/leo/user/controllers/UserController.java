@@ -48,4 +48,15 @@ public class UserController {
         return  new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PostMapping("/user/organizer")
+    public ResponseEntity<UserDTO> createOrganizerUser(@RequestBody @Valid OrganizerUserCreateRequest organizerUserCreateRequest ){
+        User user = userService.registerNewUserAccount(organizerUserCreateRequest.getUser());
+        OrganizationProfileDTO organizationProfileDTO = organizerUserCreateRequest.getOrganizationProfileDTO();
+        organizationProfileDTO.setUserId(user.getId());
+        profileAdapter.createOrganizationProfile(organizationProfileDTO);
+        ModelMapper modelMapper = new ModelMapper();
+        UserDTO response = modelMapper.map(user,UserDTO.class);
+
+        return  new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 }
