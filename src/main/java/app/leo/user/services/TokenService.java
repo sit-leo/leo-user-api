@@ -1,5 +1,6 @@
 package app.leo.user.services;
 
+import app.leo.user.adapters.ProfileAdapter;
 import app.leo.user.exceptions.InvalidTokenException;
 import app.leo.user.models.Token;
 import app.leo.user.repositories.TokenRepository;
@@ -13,16 +14,22 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import sun.java2d.cmm.Profile;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class TokenService {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    TokenRepository tokenRepository;
+    private TokenRepository tokenRepository;
+
+    @Autowired
+    private ProfileAdapter profileAdapter;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -52,6 +59,8 @@ public class TokenService {
                 .setSubject(username);
         claims.put("userId", String.valueOf(user.getId()));
         claims.put("role", user.getRole());
+        long profileId = profileAdapter.getProfileIdByUserId(user.getRole(),user.getId());
+        claims.put("profileId", String.valueOf(profileId));
         Token token = new Token();
         token.setToken(
             Jwts.builder()
@@ -65,6 +74,7 @@ public class TokenService {
         }
         token.setUsername(username);
         token.setExpiresTime(new Date(System.currentTimeMillis()+expires));
+        token.setProfileId(profileId);
         tokenRepository.save(token);
         return token ;
     }

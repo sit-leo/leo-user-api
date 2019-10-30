@@ -17,6 +17,7 @@ public class Token {
     private String username;
     private String token;
     private Date expiresTime;
+    private long profileId;
 
     public Token() {
     }
@@ -51,5 +52,13 @@ public class Token {
 
     public void setExpiresTime(Date expiresTime) {
         this.expiresTime = expiresTime;
+    }
+
+    public long getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(long profileId) {
+        this.profileId = profileId;
     }
 }

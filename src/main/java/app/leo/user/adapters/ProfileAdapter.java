@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,7 +29,6 @@ public class ProfileAdapter {
 
     public void createRecruiterProfile(RecruiterProfileDTO recruiterProfileDTO) {
         RestTemplate restTemplate = new RestTemplate();
-        System.out.println(profileApiUrl);
         String url = profileApiUrl + "/profile/recruiter/create";
         HttpHeaders headers = new HttpHeaders();
         headers.add("user-agent",
@@ -39,7 +39,6 @@ public class ProfileAdapter {
 
     public void createOrganizationProfile(OrganizationProfileDTO organizationDTO) {
         RestTemplate restTemplate = new RestTemplate();
-        System.out.println(profileApiUrl);
         String url = profileApiUrl + "/profile/recruiter/create";
         HttpHeaders headers = new HttpHeaders();
         headers.add("user-agent",
@@ -48,4 +47,10 @@ public class ProfileAdapter {
         restTemplate.exchange(url, HttpMethod.POST, entity, RecruiterProfileDTO.class);
     }
 
+    public Long getProfileIdByUserId( String role,long userId){
+        RestTemplate restTemplate=new RestTemplate();
+        String url = profileApiUrl + "/profile/id/" + userId + "/" + role;
+        ResponseEntity<Long> responseEntity = restTemplate.getForEntity(url,Long.class);
+        return responseEntity.getBody();
+    }
 }
