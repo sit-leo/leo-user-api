@@ -50,7 +50,11 @@ public class ProfileAdapter {
     public Long getProfileIdByUserId( String role,long userId){
         RestTemplate restTemplate=new RestTemplate();
         String url = profileApiUrl + "/profile/id/" + userId + "/" + role;
-        ResponseEntity<Long> responseEntity = restTemplate.getForEntity(url,Long.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("user-agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        ResponseEntity<Long> responseEntity = restTemplate.exchange(url,HttpMethod.GET,entity,Long.class);
         return responseEntity.getBody();
     }
 }
