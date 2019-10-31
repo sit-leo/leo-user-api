@@ -14,11 +14,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import sun.java2d.cmm.Profile;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class TokenService {
