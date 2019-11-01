@@ -2,6 +2,7 @@ package app.leo.user.controllers;
 
 
 import app.leo.user.DTO.*;
+import app.leo.user.adapters.MatchManagementAdapter;
 import app.leo.user.adapters.ProfileAdapter;
 import app.leo.user.models.User;
 import app.leo.user.services.UserService;
@@ -19,10 +20,13 @@ import javax.validation.Valid;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    ProfileAdapter profileAdapter;
+    private ProfileAdapter profileAdapter;
+
+    @Autowired
+    private MatchManagementAdapter matchManagementAdapter;
 
     @PostMapping("/user/applicant")
     public ResponseEntity<UserDTO> createApplicantUser(@RequestBody @Valid ApplicantUserCreateRequest applicantUserCreateRequest){
@@ -53,10 +57,10 @@ public class UserController {
         User user = userService.registerNewUserAccount(organizerUserCreateRequest.getUser());
         OrganizationProfileDTO organizationProfileDTO = organizerUserCreateRequest.getOrganizationProfileDTO();
         organizationProfileDTO.setUserId(user.getId());
-        profileAdapter.createOrganizationProfile(organizationProfileDTO);
+        OrganizationProfileDTO  organizationProfile = profileAdapter.createOrganizationProfile(organizationProfileDTO);
+        matchManagementAdapter.createOrganization(organizationProfile);
         ModelMapper modelMapper = new ModelMapper();
         UserDTO response = modelMapper.map(user,UserDTO.class);
-
         return  new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }
