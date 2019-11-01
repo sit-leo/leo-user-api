@@ -37,14 +37,15 @@ public class ProfileAdapter {
         restTemplate.exchange(url, HttpMethod.POST, entity, RecruiterProfileDTO.class);
     }
 
-    public void createOrganizationProfile(OrganizationProfileDTO organizationDTO) {
+    public OrganizationProfileDTO createOrganizationProfile(OrganizationProfileDTO organizationDTO) {
         RestTemplate restTemplate = new RestTemplate();
         String url = profileApiUrl + "/profile/organizer/create";
         HttpHeaders headers = new HttpHeaders();
         headers.add("user-agent",
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
         HttpEntity<OrganizationProfileDTO> entity = new HttpEntity<>(organizationDTO, headers);
-        restTemplate.exchange(url, HttpMethod.POST, entity, RecruiterProfileDTO.class);
+        ResponseEntity<OrganizationProfileDTO> responseEntity = restTemplate.exchange(url, HttpMethod.POST, entity, OrganizationProfileDTO.class);
+        return responseEntity.getBody();
     }
 
     public Long getProfileIdByUserId( String role,long userId){

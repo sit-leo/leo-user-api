@@ -2,6 +2,7 @@ package app.leo.user.DTO;
 
 public class OrganizationProfileDTO {
 
+    private long id;
     private String name;
     private String description;
     private long userId;
@@ -28,5 +29,13 @@ public class OrganizationProfileDTO {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
