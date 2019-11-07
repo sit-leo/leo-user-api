@@ -16,6 +16,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class TokenService {
@@ -70,7 +71,7 @@ public class TokenService {
             return getTokenByUsernameAndToken(username,token.getToken());
         }
         token.setUsername(username);
-        token.setExpiresTime(new Date(System.currentTimeMillis()+expires));
+        token.setExpiresTime(new Date(System.currentTimeMillis()+ TimeUnit.DAYS.toMillis(15)));
         token.setProfileId(profileId);
         tokenRepository.save(token);
         return token ;
@@ -99,7 +100,7 @@ public class TokenService {
     }
 
     private boolean isExpires(Token token){
-        return !token.getExpiresTime().after(new Date(System.currentTimeMillis()));
+        return token.getExpiresTime().after(new Date(System.currentTimeMillis()));
     }
 
     public void LogOut(String username) {
@@ -109,6 +110,4 @@ public class TokenService {
     public Token getTokenByUsernameAndToken(String username,String token){
         return tokenRepository.findByUsernameAndToken(username,token);
     }
-
-
 }
