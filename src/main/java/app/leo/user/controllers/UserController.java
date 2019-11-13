@@ -1,6 +1,5 @@
 package app.leo.user.controllers;
 
-
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -9,11 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.leo.user.DTO.ApplicantProfileDTO;
 import app.leo.user.DTO.ApplicantUserCreateRequest;
+import app.leo.user.DTO.ChangePasswordDTO;
 import app.leo.user.DTO.OrganizationProfileDTO;
 import app.leo.user.DTO.OrganizerUserCreateRequest;
 import app.leo.user.DTO.RecruiterProfileDTO;
@@ -81,4 +83,15 @@ public class UserController {
         UserDTO response = modelMapper.map(user,UserDTO.class);
         return  new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+	@PutMapping("/change-password")
+	public ResponseEntity<UserDTO> changePassword(
+			@RequestBody @Valid ChangePasswordDTO password,
+			@RequestAttribute(name = "user") UserDTO user
+	){
+		User changedPasswordUser = userService.changePassword(password, user.getUserId());
+		ModelMapper modelMapper = new ModelMapper();
+		UserDTO response = modelMapper.map(changedPasswordUser,UserDTO.class);
+		return  new ResponseEntity<>(response, HttpStatus.CREATED);
+	}
 }

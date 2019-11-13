@@ -5,7 +5,16 @@ public class UserDTO {
     private String password;
     private String role;
 
+    private long userId;
+    private long profileId;
+
     public UserDTO() {
+    }
+
+    public UserDTO(long userId, String role, long profileId) {
+        this.userId = userId;
+        this.role = role;
+        this.profileId = profileId;
     }
 
     public String getUsername() {
@@ -30,5 +39,21 @@ public class UserDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getProfileId() {
+        return profileId;
+    }
+
+    public void setProfileId(long profileId) {
+        this.profileId = profileId;
     }
 }
