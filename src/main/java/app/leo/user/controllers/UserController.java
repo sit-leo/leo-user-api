@@ -44,6 +44,7 @@ public class UserController {
 
     @PostMapping("/user/applicant")
     public ResponseEntity<UserDTO> createApplicantUser(@RequestBody @Valid ApplicantUserCreateRequest applicantUserCreateRequest){
+        applicantUserCreateRequest.getUser().setRole("applicant");
         recaptchaAdapter.isValidReCaptcha(applicantUserCreateRequest.getRecaptcha());
         User user = userService.registerNewUserAccount(applicantUserCreateRequest.getUser());
         ApplicantProfileDTO applicantProfileDTO = applicantUserCreateRequest.getApplicantProfile();
@@ -58,6 +59,7 @@ public class UserController {
 
     @PostMapping("/user/recruiter")
     public ResponseEntity<UserDTO> createRecruiterUser(@RequestBody @Valid RecruiterUserCreateRequest recruiterUserCreateRequest){
+        recruiterUserCreateRequest.getUser().setRole("recruiter");
         recaptchaAdapter.isValidReCaptcha(recruiterUserCreateRequest.getRecaptcha());
         User user = userService.registerNewUserAccount(recruiterUserCreateRequest.getUser());
         RecruiterProfileDTO recruiterProfile = recruiterUserCreateRequest.getRecruiterProfile();
@@ -65,7 +67,6 @@ public class UserController {
         profileAdapter.createRecruiterProfile(recruiterProfile);
         ModelMapper modelMapper = new ModelMapper();
         UserDTO response = modelMapper.map(user,UserDTO.class);
-
         return  new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
