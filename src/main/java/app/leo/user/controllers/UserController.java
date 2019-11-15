@@ -74,7 +74,9 @@ public class UserController {
 
     @PostMapping("/user/organizer")
     public ResponseEntity<UserDTO> createOrganizerUser(@RequestBody @Valid OrganizerUserCreateRequest organizerUserCreateRequest ){
-        User user = userService.registerNewUserAccount(organizerUserCreateRequest.getUser());
+        UserDTO newUser = organizerUserCreateRequest.getUser();
+        newUser.setRole("organizer");
+        User user = userService.registerNewUserAccount(newUser);
         OrganizationProfileDTO organizationProfileDTO = organizerUserCreateRequest.getOrganizationProfileDTO();
         organizationProfileDTO.setUserId(user.getId());
         OrganizationProfileDTO  organizationProfile = profileAdapter.createOrganizationProfile(organizationProfileDTO);
