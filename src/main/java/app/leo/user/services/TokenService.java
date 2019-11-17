@@ -64,6 +64,7 @@ public class TokenService {
             Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, secret)
+                .setExpiration(new Date(System.currentTimeMillis()+ TimeUnit.DAYS.toMillis(15)))
                 .compact()
         );
         token.setToken(token.getToken());
