@@ -20,7 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Bean
 	public MappedInterceptor mappedInterceptor() {
 		return new MappedInterceptor(
-				new String[] {"/change-password"},
+				new String[] {"/change-password","/user/organizer"},
 				tokenInterceptor());
 	}
 
